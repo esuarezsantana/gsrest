@@ -1,7 +1,7 @@
 .PHONY: default ci edit tests install edit pytest \
 	docs docs-html docs-autogen docs-coverage docs-server docs-clean \
 	interrogate docker-start docker-stop license-headers \
-	bump-patch bump-minor bump-major
+	bump-patch bump-minor bump-major publish
 
 SELF = gsrest
 DOC_HTTP_PORT = 9000
@@ -79,3 +79,6 @@ bump-minor:
 
 bump-major:
 	poetry run bump2version major
+
+publish:
+	poetry check && poetry build && poetry publish
