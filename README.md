@@ -13,10 +13,10 @@ themself.
 
   * HTTP only. *Warning*: your geoserver credentials may be publicly exposed.
   * Python >= 3.7.
-  * No runtime dependencies (pure python).
   * Static setup of the connection for all GeoServer elements.
   * Easily extendable.
   * Support to load elements from a YAML file.
+  * Just PyYAML as runtime dependency.
 
 ## Installation
 
