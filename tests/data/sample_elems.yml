@@ -1,0 +1,61 @@
+##
+## Copyright (c) 2020 Instituto Tecnológico de Canarias, S.A.
+##
+## This file is part of GsRest
+## (see https://github.com/esuarezsantana/gsrest).
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program. If not, see <http://www.gnu.org/licenses/>.
+##
+---
+
+elements:
+    - workspaces:
+        - prefix: yaml_wsp_name
+          uri: yaml_wsp_uri
+      styles:
+        - name: yaml_sty_name
+          workspace: yaml_wsp_name
+          filename: yaml_sty_filename
+      sld10s:
+        - identity: yaml_sty_name
+          workspace: yaml_wsp_name
+          content: |
+            <?xml version="1.0" encoding="UTF-8"?>
+            <StyledLayerDescriptor version="1.0.0"
+                xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd"
+                xmlns="http://www.opengis.net/sld"
+                xmlns:ogc="http://www.opengis.net/ogc"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+              <NamedLayer>
+                <Name>wind_style</Name>
+                <UserStyle>
+                  <Title>Wind speed</Title>
+                  <Abstract>Simple style for wind speed.</Abstract>
+                  <FeatureTypeStyle>
+                    <Rule>
+                      <RasterSymbolizer>
+                        <ColorMap>
+                          <ColorMapEntry color="#000000" opacity="0.0" quantity="-1.0" label="nodata"/>
+                          <ColorMapEntry color="#000000" opacity="1.0" quantity="0.0" label="zero(0)"/>
+                          <ColorMapEntry color="#ffffff" opacity="1.0" quantity="15.0" label="max(15)"/>
+                        </ColorMap>
+                        <ContrastEnhancement/>
+                      </RasterSymbolizer>
+                    </Rule>
+                  </FeatureTypeStyle>
+                </UserStyle>
+              </NamedLayer>
+            </StyledLayerDescriptor>
+

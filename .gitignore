@@ -1,0 +1,15 @@
+# poetry
+/dist/
+*.egg-info/
+/poetry.lock
+
+# python
+__pycache__/
+.mypy_cache/
+
+# sphinx
+/docs/source/autogen/
+/docs/build/
+
+# coverage
+/.coverage
