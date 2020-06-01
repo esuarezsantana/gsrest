@@ -26,7 +26,7 @@ install:
 	poetry install
 
 edit:
-	poetry run $(EDITOR) .
+	poetry run $(EDITOR) src
 
 pytest:
 	poetry run pytest --cov=$(SELF)
