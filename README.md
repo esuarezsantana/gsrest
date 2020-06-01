@@ -15,7 +15,7 @@ themself.
   * Python >= 3.7.
   * Static setup of the connection for all GeoServer elements.
   * Easily extendable.
-  * Support to load elements from a YAML file.
+  * CLI to upload from YAML (great for automation).
   * Just PyYAML as runtime dependency.
 
 ## Installation
@@ -63,4 +63,4 @@ $ docker kill geoserver
 
 ## License
 
-Licensed under the term of `GPL-3.0-or-later LICENSE`. See [LICENSE](LICENSE).
+Licensed under the term of `GPL-3.0-or-later LICENSE`. See [LICENSE](https://github.com/esuarezsantana/gsrest/blob/master/LICENSE).

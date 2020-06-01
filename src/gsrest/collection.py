@@ -21,9 +21,12 @@
 """Geoserver element collection.
 """
 
+import logging
 from collections import abc as abccl
 
 from .core import element
+
+_LOGGER = logging.getLogger(__name__)
 
 
 # pylint: disable=too-many-ancestors
@@ -58,9 +61,11 @@ class ElementCollection(abccl.MutableSequence):
     def sync(self, down=False):
         "Sync all elements."
         for item in self:
+            _LOGGER.debug("Syncing %s %s", "down" if down else "up", item)
             item.sync(down)
 
     def delete(self):
-        "Delete all elements."
-        for item in self:
+        "Delete all elements (in reverse order)."
+        for item in reversed(self):
+            _LOGGER.debug("Deleting %s", item)
             item.delete()

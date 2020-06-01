@@ -64,7 +64,7 @@ docker-stop:
 	docker-compose -f tests/docker-compose.yml down
 
 license-headers:
-	for license_dir in gsrest tests; do \
+	for license_dir in src tests; do \
 		poetry run licenseheaders \
 			-t helper/licenseheaders-gpl-v3.tmpl -d $$license_dir \
 			-n "$(PROGRAM_NAME)" -o "$(LICENSE_OWNER)" \

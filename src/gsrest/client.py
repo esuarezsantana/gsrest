@@ -31,6 +31,10 @@ from .helper import decorator  # type: ignore
 _LOGGER = logging.getLogger(__name__)
 
 
+class GsException(Exception):
+    "General Geoserver Error."
+
+
 class GsUpstreamUndefined(Exception):
     "When geoserver client has not been defined."
 
@@ -131,6 +135,17 @@ class GsClient:
             connect.RequestParams(*args, method="DELETE", **kwargs)
         )
 
+    @staticmethod
+    def _debug_response(resp):
+        _LOGGER.debug("Query response:")
+        for line in resp.splitlines():
+            _LOGGER.debug("        %s", line)
+
+    @staticmethod
+    def _myraise(err):
+        with err:
+            raise GsException(" ".join((str(err.code), err.read().decode())))
+
     def list(self, cls, **route_args):
         """Get list of names of available elements.
 
@@ -144,7 +159,7 @@ class GsClient:
         """
         _LOGGER.info("Getting list for %s", cls.__name__)
         resp = self._get(route=cls.build_route(method="GET", **route_args))
-        _LOGGER.debug(resp)
+        self._debug_response(resp)
         return cls.list_names_from_xml_stream(resp)
 
     def create(self, elem, query=None):
@@ -180,8 +195,7 @@ class GsClient:
                 elem.__class__, workspace=elem.workspace,
             ):
                 raise GsElementAlreadyExists(err.msg)
-            with err:
-                raise Exception(err.read())
+            self._myraise(err)
 
     def read(self, obj, name=None, query=None, **route_args):
         """Read an element into a new element (may populate unknown attrs).
@@ -231,9 +245,8 @@ class GsClient:
         except urlerr.HTTPError as err:
             if err.code == 404:
                 raise GsElementDoesNotExist
-            with err:
-                raise Exception(err.read())
-        _LOGGER.debug(resp)
+            self._myraise(err)
+        self._debug_response(resp)
         return klass(identity=identity, content=resp, workspace=workspace)
 
     def read_all(self, cls, **route_args):
@@ -283,8 +296,7 @@ class GsClient:
         except urlerr.HTTPError as err:
             if err.code == 404:
                 raise GsElementDoesNotExist
-            with err:
-                raise Exception(err.read())
+            self._myraise(err)
 
     def delete(self, obj, name=None, query=None, **route_args):
         """Delete an element.
@@ -314,9 +326,8 @@ class GsClient:
             self._delete(route=route, query=(query if query else {}))
         except urlerr.HTTPError as err:
             if err.code == 404:
-                raise GsElementDoesNotExist
-            with err:
-                raise Exception(err.read())
+                raise GsElementDoesNotExist(route)
+            self._myraise(err)
 
 
 # pylint: disable=too-few-public-methods

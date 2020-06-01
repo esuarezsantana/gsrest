@@ -23,6 +23,7 @@
 
 import base64
 import dataclasses
+import logging
 import pprint
 import typing as tp
 import urllib.error as urlerr
@@ -30,8 +31,9 @@ import urllib.parse as urlparse
 import urllib.request as urlreq
 
 from ..core import url
-from ..helper import logger  # type: ignore
 from ..xml import converter, schema
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def _content_type_xml():
@@ -92,9 +94,14 @@ class RequestParams:
         header_str = "".join(
             " -H '{}: {}'".format(k, v) for k, v in self.headers.items()
         )
+        body_str = (
+            " -d @data.xml"
+            if self.method.lower() in ["post", "put", "update"]
+            else ""
+        )
         # pylint: disable=no-member
-        return "curl{} -X {} {}".format(
-            header_str, self.method, self.url(baseurl)
+        return "curl -X {}{}{} {}".format(
+            self.method, body_str, header_str, self.url(baseurl)
         )
 
     def pprint(self, baseurl):
@@ -103,7 +110,7 @@ class RequestParams:
 
 
 @dataclasses.dataclass
-class Connect(metaclass=logger.MetaLogger):
+class Connect:
     """Connection management with Geoserver instance.
 
     Args:
@@ -147,8 +154,9 @@ class Connect(metaclass=logger.MetaLogger):
         my_auth_header = self._user_pass_auth_header()
         req.headers = {**my_auth_header, **req.headers}
         # pylint: disable=no-member
-        Connect.__logger.debug(req.curl_str(self.base_url))
-        Connect.__logger.debug(req.pprint(self.base_url))
+        _LOGGER.debug("Curl equivalent => %s", req.curl_str(self.base_url))
+        if req.data:
+            _LOGGER.debug("Payload (data.xml) => %s", req.data)
         with urlreq.urlopen(req.request(self.base_url)) as request:  # nosec
             content = request.read().decode("utf-8")
         return content

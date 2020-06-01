@@ -21,12 +21,15 @@
 """Core element for geoserver entities.
 """
 
+import logging
 import typing
 
 from .. import client
 from ..helper import function as helperfun  # type: ignore
 from ..xml import io
 from . import registry, schema, traits, url
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ClientElement(client.BaseClient):
@@ -147,7 +150,10 @@ class ClientElement(client.BaseClient):
         This method exists because it may be specialized by subclasses.
 
         """
-        self.client.delete(self)  # pylint: disable=too-many-function-args
+        if self._crud_policy & traits.CrudPolicy.DELETE:
+            self.client.delete(self)  # pylint: disable=too-many-function-args
+        else:
+            _LOGGER.warning("Ignoring deletion of element '%s'", self.identity)
 
     @classmethod
     def list(cls, **route_args):

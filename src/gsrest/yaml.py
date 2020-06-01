@@ -21,10 +21,14 @@
 """Geoserver rest YAML importer.
 """
 
+import logging
+
 import yaml
 
 from . import collection
 from .core.registry import ElementRegistry
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class GsYamlError(Exception):
@@ -54,4 +58,6 @@ def read(yaml_path):
         gs_data = main_dikt["elements"]
     except KeyError:
         raise GsYamlError
-    return collection.ElementCollection(*_parse(gs_data))
+    elems = list(_parse(gs_data))
+    _LOGGER.info("Loaded %d elems from %s.", len(elems), yaml_path)
+    return collection.ElementCollection(*elems)
