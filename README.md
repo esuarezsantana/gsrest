@@ -20,6 +20,8 @@ themself.
 
 ## Installation
 
+Download from [PyPI](https://pypi.org/project/gsrest/):
+
 ```
 pip install gsrest
 ```
