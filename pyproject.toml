@@ -6,7 +6,7 @@ authors = ["Eduardo Suarez-Santana"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
 repository = "https://github.com/esuarezsantana/gsrest"
-keywords = ["geoserver"]
+keywords = ["geoserver", "gis", "client", "rest"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3.7",
